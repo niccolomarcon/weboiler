@@ -53,11 +53,6 @@ module.exports = function(grunt) {
       },
       src: ['**']
     },
-    shell: {
-      dep: {
-        command: 'rm -rf ~/Sites/dist && cp -r dist ~/Sites'
-      }
-    },
     imagemin: {
       static: {
         options: {
@@ -83,6 +78,18 @@ module.exports = function(grunt) {
           }
         ]
       }
+    },
+    'http-server': {
+      'dev': {
+        root: 'dist',
+        port: 8080,
+        host: '0.0.0.0'
+        openBrowser : true,
+        //customPages: {
+        //  "/readme": "README.md",
+        //  "/readme.html": "README.html"
+        //}
+      }
     }
   });
 
@@ -91,10 +98,10 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-processhtml');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-gh-pages');
-  grunt.loadNpmTasks('grunt-shell');
   grunt.loadNpmTasks('grunt-contrib-imagemin');
   grunt.loadNpmTasks('grunt-newer');
   grunt.loadNpmTasks('grunt-xml-sitemap');
+  grunt.loadNpmTasks('grunt-http-server');
 
   var msg = grunt.option('m') || '';
 
@@ -111,6 +118,6 @@ module.exports = function(grunt) {
     if (msg != '') { grunt.config.set('gh-pages.options.message', msg); }
     grunt.task.run('gh-pages');
   });
-  grunt.registerTask('local', ['default', 'shell:dep']);
+  grunt.registerTask('local', ['default', 'http-server:dev']);
 
 };

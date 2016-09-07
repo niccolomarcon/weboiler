@@ -37,7 +37,7 @@ module.exports = function(grunt) {
           {
             expand: true,
             cwd: 'src/',
-            flatten: true
+            flatten: true,
             filter: 'isFile',
             src: 'robots.txt',
             dest: 'dist/',
@@ -79,16 +79,40 @@ module.exports = function(grunt) {
         ]
       }
     },
-    'http-server': {
-      'dev': {
-        root: 'dist',
-        port: 8080,
-        host: '0.0.0.0'
-        openBrowser : true,
-        //customPages: {
-        //  "/readme": "README.md",
-        //  "/readme.html": "README.html"
-        //}
+    watch: {
+      html: {
+        files: 'src/**/*.html',
+        tasks: ['newer:processhtml', 'xml_sitemap']
+      },
+      css: {
+        files: 'src/css/**/*.css',
+        tasks: ['newer:cssmin']
+      },
+      js: {
+        files: 'src/js/**/*.js',
+        tasks: ['newer:uglify']
+      },
+      img: {
+        files: ['scr/media/**/*.gif', 'scr/media/**/*.png', 'scr/media/**/*.jpg', 'scr/media/**/*.jpeg'],
+        tasks: ['newer:imagemin:static']
+      },
+      other_files: {
+        files: ['src/favicon.ico', 'src/robots.txt'],
+        tasks: ['newer:copy']
+      }
+    },
+    browserSync: {
+      dev: {
+        bsFiles: {
+          src : ['dist/**/*.*']
+        },
+        options: {
+          watchTask: true,
+          server: './dist',
+          port: 8080,
+          ghostMode: false, //true
+          open: false //local
+        }
       }
     }
   });
@@ -101,7 +125,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-imagemin');
   grunt.loadNpmTasks('grunt-newer');
   grunt.loadNpmTasks('grunt-xml-sitemap');
-  grunt.loadNpmTasks('grunt-http-server');
+  grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-browser-sync');
 
   var msg = grunt.option('m') || '';
 
@@ -118,6 +143,6 @@ module.exports = function(grunt) {
     if (msg != '') { grunt.config.set('gh-pages.options.message', msg); }
     grunt.task.run('gh-pages');
   });
-  grunt.registerTask('local', ['default', 'http-server:dev']);
+  grunt.registerTask('local', ['default', 'browserSync', 'watch']);
 
 };

@@ -114,6 +114,15 @@ module.exports = function(grunt) {
           open: false //local
         }
       }
+    },
+    cloudflare_purge: {
+      default: {
+        options: {
+          // apiKey: "123456789987654321",
+          // email: "someone@exemple.com",
+          // zone: "exemple.com"
+        }
+      }
     }
   });
 
@@ -142,6 +151,7 @@ module.exports = function(grunt) {
     grunt.task.run('default');
     if (msg != '') { grunt.config.set('gh-pages.options.message', msg); }
     grunt.task.run('gh-pages');
+    grunt.task.run('cloudflare_purge');
   });
   grunt.registerTask('local', ['default', 'browserSync', 'watch']);
 

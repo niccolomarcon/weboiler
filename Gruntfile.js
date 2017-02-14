@@ -5,14 +5,14 @@ module.exports = function(grunt) {
     uglify: {
       target: {
         files: {
-          'dist/js/main.min.js': 'src/js/main.js'
+          'dist/js/index.min.js': 'src/js/index.js'
         }
       }
     },
     cssmin: {
       target: {
         files: {
-          'dist/css/main.min.css': 'src/css/main.css'
+          'dist/css/index.min.css': 'src/css/index.css'
         }
       }
     },
